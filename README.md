@@ -1,4 +1,3 @@
-````markdown
 # 📋 Gestion d’État Civil
 
 Bienvenue sur **Gestion d’État Civil**, une application web dédiée à la gestion des registres civils (naissances, mariages, décès, divorces, résidences) avec un tableau de bord complet et une interface claire.  
@@ -59,19 +58,6 @@ Bien que je puisse uniquement voir le front, les technologies probables ou néce
 - **Backend et base de données** (à ajouter) : pour stocker les données des actes civils (ex: Node.js, PHP, Python, etc. + MySQL, PostgreSQL, MongoDB)  
 - **API / REST** : pour gérer les opérations CRUD (Create, Read, Update, Delete) sur les données  
 - **Authentification & sécurité** : gestion des utilisateurs avec rôles (administrateur, agent civil)  
-
----
-
-## 🚀 Installation / Test Local
-
-Voici comment tu pourrais cloner et tester ce projet localement (version front-end) :
-
-```bash
-git clone https://github.com/haja12233/EtatCivil.github.io.git
-cd EtatCivil.github.io
-````
-
-Ouvre ensuite `index.html` dans ton navigateur pour voir l’interface.
 
 ---
 
