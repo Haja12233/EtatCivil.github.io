@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Déclaration de Décès</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --sidebar-width: 250px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--dark-color);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid white;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            margin: 0;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            position: relative;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .sidebar-menu .active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .dropdown-menu {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding-left: 20px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .user-info {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+        }
+
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--primary-color);
+            margin: 25px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-color);
+        }
+
+        .edit-badge {
+            background-color: #f39c12;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="Commune_urbaine_mahajanga.jpeg" alt="Logo" class="logo-image">
+            <h2>Gestion d'État Civil</h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="../index.html"><i class="fas fa-home"></i> Accueil</a></li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-baby"></i> Naissance</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Naissance/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Naissance/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-heart"></i> Mariage</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Mariage/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Mariage/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-cross"></i> Décès</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="Déclare.html" class="active"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-user-times"></i> Divorce</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Divorce/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Divorce/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li><a href="../résidence.html"><i class="fas fa-house-user"></i> Résidence</a></li>
+            </ul>
+        </div>
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <p>Nom d'utilisateur</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-edit"></i> Déclaration de Décès</h1>
+            <button class="btn btn-info" onclick="window.location.href='Registre.html'">
+                <i class="fas fa-book"></i> Voir le Registre
+            </button>
+        </div>
+
+        <div class="form-container">
+            <div class="form-header">
+                <h2 id="formTitle">Nouvelle Déclaration de Décès</h2>
+                <div id="editBadge" class="edit-badge" style="display: none;">
+                    <i class="fas fa-edit"></i> Mode édition
+                </div>
+            </div>
+
+            <div id="alertMessage" style="display: none;"></div>
+
+            <form id="decesForm">
+                <h3 class="section-title"><i class="fas fa-user"></i> Informations sur le défunt</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="defunt_nom" class="required"><i class="fas fa-user"></i> Nom</label>
+                        <input type="text" id="defunt_nom" name="defunt_nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="defunt_prenom" class="required"><i class="fas fa-user"></i> Prénom</label>
+                        <input type="text" id="defunt_prenom" name="defunt_prenom" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="defunt_date_naissance" class="required"><i class="fas fa-calendar"></i> Date de naissance</label>
+                        <input type="date" id="defunt_date_naissance" name="defunt_date_naissance" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="defunt_lieu_naissance" class="required"><i class="fas fa-map-marker-alt"></i> Lieu de naissance</label>
+                        <input type="text" id="defunt_lieu_naissance" name="defunt_lieu_naissance" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="defunt_profession"><i class="fas fa-briefcase"></i> Profession</label>
+                        <input type="text" id="defunt_profession" name="defunt_profession">
+                    </div>
+                    <div class="form-group">
+                        <label for="defunt_domicile" class="required"><i class="fas fa-home"></i> Dernier domicile</label>
+                        <input type="text" id="defunt_domicile" name="defunt_domicile" required>
+                    </div>
+                </div>
+
+                <h3 class="section-title"><i class="fas fa-cross"></i> Informations sur le décès</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date_deces" class="required"><i class="fas fa-calendar-times"></i> Date du décès</label>
+                        <input type="date" id="date_deces" name="date_deces" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="heure_deces"><i class="fas fa-clock"></i> Heure du décès</label>
+                        <input type="time" id="heure_deces" name="heure_deces">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lieu_deces" class="required"><i class="fas fa-map-marker-alt"></i> Lieu du décès</label>
+                    <input type="text" id="lieu_deces" name="lieu_deces" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cause_deces" class="required"><i class="fas fa-stethoscope"></i> Cause du décès</label>
+                    <select id="cause_deces" name="cause_deces" required>
+                        <option value="">Sélectionner</option>
+                        <option value="naturelle">Cause naturelle</option>
+                        <option value="maladie">Maladie</option>
+                        <option value="accident">Accident</option>
+                        <option value="suicide">Suicide</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="details_cause"><i class="fas fa-file-medical"></i> Détails sur la cause</label>
+                    <textarea id="details_cause" name="details_cause" rows="3" placeholder="Précisions sur les circonstances du décès..."></textarea>
+                </div>
+
+                <h3 class="section-title"><i class="fas fa-user-check"></i> Informations du déclarant</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="declarant_nom" class="required"><i class="fas fa-user"></i> Nom du déclarant</label>
+                        <input type="text" id="declarant_nom" name="declarant_nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="declarant_prenom" class="required"><i class="fas fa-user"></i> Prénom du déclarant</label>
+                        <input type="text" id="declarant_prenom" name="declarant_prenom" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="declarant_qualite" class="required"><i class="fas fa-user-tag"></i> Qualité du déclarant</label>
+                        <select id="declarant_qualite" name="declarant_qualite" required>
+                            <option value="">Sélectionner</option>
+                            <option value="conjoint">Conjoint</option>
+                            <option value="enfant">Enfant</option>
+                            <option value="parent">Parent</option>
+                            <option value="frere_soeur">Frère/Soeur</option>
+                            <option value="medecin">Médecin</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="declarant_domicile" class="required"><i class="fas fa-home"></i> Domicile du déclarant</label>
+                        <input type="text" id="declarant_domicile" name="declarant_domicile" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="observations"><i class="fas fa-sticky-note"></i> Observations</label>
+                    <textarea id="observations" name="observations" rows="3" placeholder="Informations complémentaires..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <div>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='Registre.html'">
+                            <i class="fas fa-arrow-left"></i> Retour au Registre
+                        </button>
+                    </div>
+                    <div style="display: flex; gap: 15px;">
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Annuler
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="submitButton">
+                            <i class="fas fa-save"></i> Enregistrer la déclaration
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            const form = document.getElementById('decesForm');
+            const alertMessage = document.getElementById('alertMessage');
+            const formTitle = document.getElementById('formTitle');
+            const editBadge = document.getElementById('editBadge');
+            const submitButton = document.getElementById('submitButton');
+            
+            let isEditMode = false;
+            let editRecordId = null;
+            
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.querySelector('.dropdown-menu').style.display = 'block';
+                });
+                
+                dropdown.addEventListener('mouseleave', function() {
+                    this.querySelector('.dropdown-menu').style.display = 'none';
+                });
+            });
+
+            // Vérifier si on est en mode édition
+            function checkEditMode() {
+                editRecordId = localStorage.getItem('editRecordId');
+                
+                if (editRecordId) {
+                    isEditMode = true;
+                    formTitle.textContent = 'Modification de Déclaration de Décès';
+                    editBadge.style.display = 'inline-flex';
+                    submitButton.innerHTML = '<i class="fas fa-sync-alt"></i> Mettre à jour la déclaration';
+                    
+                    // Charger les données existantes
+                    const declarations = JSON.parse(localStorage.getItem('declarationsDeces')) || [];
+                    const recordToEdit = declarations.find(item => item.id === editRecordId);
+                    
+                    if (recordToEdit) {
+                        // Remplir le formulaire avec les données existantes
+                        document.getElementById('defunt_nom').value = recordToEdit.defunt_nom || '';
+                        document.getElementById('defunt_prenom').value = recordToEdit.defunt_prenom || '';
+                        document.getElementById('defunt_date_naissance').value = recordToEdit.defunt_date_naissance || '';
+                        document.getElementById('defunt_lieu_naissance').value = recordToEdit.defunt_lieu_naissance || '';
+                        document.getElementById('defunt_profession').value = recordToEdit.defunt_profession || '';
+                        document.getElementById('defunt_domicile').value = recordToEdit.defunt_domicile || '';
+                        document.getElementById('date_deces').value = recordToEdit.date_deces || '';
+                        document.getElementById('heure_deces').value = recordToEdit.heure_deces || '';
+                        document.getElementById('lieu_deces').value = recordToEdit.lieu_deces || '';
+                        document.getElementById('cause_deces').value = recordToEdit.cause_deces || '';
+                        document.getElementById('details_cause').value = recordToEdit.details_cause || '';
+                        document.getElementById('declarant_nom').value = recordToEdit.declarant_nom || '';
+                        document.getElementById('declarant_prenom').value = recordToEdit.declarant_prenom || '';
+                        document.getElementById('declarant_qualite').value = recordToEdit.declarant_qualite || '';
+                        document.getElementById('declarant_domicile').value = recordToEdit.declarant_domicile || '';
+                        document.getElementById('observations').value = recordToEdit.observations || '';
+                        
+                        showAlert('Vous êtes en mode édition. Modifiez les champs nécessaires puis enregistrez.', 'warning');
+                    } else {
+                        showAlert('Enregistrement non trouvé. Création d\'une nouvelle déclaration.', 'warning');
+                        isEditMode = false;
+                        localStorage.removeItem('editRecordId');
+                    }
+                }
+            }
+
+            // Afficher une alerte
+            function showAlert(message, type) {
+                alertMessage.innerHTML = `
+                    <div class="alert alert-${type}">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                        ${message}
+                    </div>
+                `;
+                alertMessage.style.display = 'block';
+                
+                // Masquer l'alerte après 5 secondes
+                setTimeout(() => {
+                    alertMessage.style.display = 'none';
+                }, 5000);
+            }
+
+            // Générer un numéro d'acte unique
+            function generateNumeroActe() {
+                const now = new Date();
+                const year = now.getFullYear();
+                const randomNum = Math.floor(Math.random() * 9000) + 1000;
+                return `D-${year}-${randomNum}`;
+            }
+
+            // Valider le formulaire
+            function validateForm(formData) {
+                const errors = [];
+                
+                // Vérifier que la date de décès n'est pas dans le futur
+                const dateDeces = new Date(formData.get('date_deces'));
+                const today = new Date();
+                if (dateDeces > today) {
+                    errors.push('La date de décès ne peut pas être dans le futur');
+                }
+                
+                // Vérifier que la date de naissance est avant la date de décès
+                const dateNaissance = new Date(formData.get('defunt_date_naissance'));
+                if (dateNaissance >= dateDeces) {
+                    errors.push('La date de naissance doit être antérieure à la date de décès');
+                }
+                
+                return errors;
+            }
+
+            // Gestion du formulaire
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Récupérer les données du formulaire
+                const formData = new FormData(form);
+                
+                // Valider le formulaire
+                const validationErrors = validateForm(formData);
+                if (validationErrors.length > 0) {
+                    showAlert('Erreurs de validation : ' + validationErrors.join(', '), 'warning');
+                    return;
+                }
+                
+                const decesData = {};
+                for (let [key, value] of formData.entries()) {
+                    decesData[key] = value;
+                }
+                
+                // Récupérer les données existantes
+                let declarations = JSON.parse(localStorage.getItem('declarationsDeces')) || [];
+                let message = '';
+                
+                if (isEditMode && editRecordId) {
+                    // Mode édition - mettre à jour l'enregistrement existant
+                    const index = declarations.findIndex(item => item.id === editRecordId);
+                    if (index !== -1) {
+                        // Garder l'ID et le numéro d'acte existants
+                        decesData.id = editRecordId;
+                        decesData.numeroActe = declarations[index].numeroActe;
+                        declarations[index] = { ...declarations[index], ...decesData };
+                        message = 'Déclaration de décès mise à jour avec succès!';
+                    }
+                } else {
+                    // Mode création - nouvel enregistrement
+                    decesData.id = 'D-' + Date.now();
+                    decesData.numeroActe = generateNumeroActe();
+                    declarations.push(decesData);
+                    message = 'Déclaration de décès enregistrée avec succès!';
+                }
+                
+                // Sauvegarder dans le localStorage
+                localStorage.setItem('declarationsDeces', JSON.stringify(declarations));
+                
+                showAlert(message, 'success');
+                
+                // Nettoyer l'ID d'édition après utilisation
+                if (isEditMode) {
+                    localStorage.removeItem('editRecordId');
+                }
+                
+                // Redirection vers le registre après 2 secondes
+                setTimeout(() => {
+                    window.location.href = 'Registre.html';
+                }, 2000);
+            });
+
+            // Gestion de la réinitialisation du formulaire
+            form.addEventListener('reset', function() {
+                if (isEditMode) {
+                    showAlert('Le formulaire a été réinitialisé. Les valeurs originales ont été restaurées.', 'warning');
+                    // Recharger les données originales
+                    checkEditMode();
+                } else {
+                    showAlert('Le formulaire a été réinitialisé.', 'warning');
+                }
+            });
+
+            // Validation en temps réel
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                field.addEventListener('blur', function() {
+                    if (!this.value.trim()) {
+                        this.style.borderColor = '#e74c3c';
+                    } else {
+                        this.style.borderColor = '#ddd';
+                    }
+                });
+            });
+
+            // Initialiser
+            checkEditMode();
+        });
+    </script>
+</body>
+</html>

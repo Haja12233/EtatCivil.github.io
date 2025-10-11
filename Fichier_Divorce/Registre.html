@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registre des Divorces</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --sidebar-width: 250px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--dark-color);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid white;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Le reste du CSS reste inchangé */
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            position: relative;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .sidebar-menu .active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .dropdown-menu {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding-left: 20px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .user-info {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+        }
+
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        tr:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pagination button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="Commune_urbaine_mahajanga.jpeg" alt="Logo" class="logo-image">
+            <h2>Gestion d'État Civil</h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="../index.html"><i class="fas fa-home"></i> Accueil</a></li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-baby"></i> Naissance</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Naissance/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Naissance/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-heart"></i> Mariage</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Mariage/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Mariage/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-cross"></i> Décès</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Deces/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Deces/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-user-times"></i> Divorce</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="Registre.html" class="active"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li><a href="../résidence.html"><i class="fas fa-house-user"></i> Résidence</a></li>
+            </ul>
+        </div>
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <p>Nom d'utilisateur</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-book"></i> Registre des Divorces</h1>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Rechercher...">
+                <button class="btn btn-primary" id="searchButton"><i class="fas fa-search"></i> Rechercher</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag"></i> N° Jugement</th>
+                        <th><i class="fas fa-calendar"></i> Date Divorce</th>
+                        <th><i class="fas fa-male"></i> Ancien Époux</th>
+                        <th><i class="fas fa-female"></i> Ancienne Épouse</th>
+                        <th><i class="fas fa-calendar-heart"></i> Date Mariage</th>
+                        <th><i class="fas fa-gavel"></i> Type Divorce</th>
+                        <th><i class="fas fa-balance-scale"></i> Tribunal</th>
+                        <th><i class="fas fa-child"></i> Garde Enfants</th>
+                        <th><i class="fas fa-cog"></i> Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Les données seront insérées ici dynamiquement -->
+                </tbody>
+            </table>
+            
+            <div class="pagination" id="pagination">
+                <!-- La pagination sera générée dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.querySelector('.dropdown-menu').style.display = 'block';
+                });
+                
+                dropdown.addEventListener('mouseleave', function() {
+                    this.querySelector('.dropdown-menu').style.display = 'none';
+                });
+            });
+
+            // Gestion du registre
+            const tableBody = document.getElementById('tableBody');
+            const pagination = document.getElementById('pagination');
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            
+            let currentPage = 1;
+            const itemsPerPage = 5;
+            let allDivorces = [];
+            let filteredDivorces = [];
+            
+            // Charger les données depuis le localStorage
+            function loadDivorces() {
+                const stored = localStorage.getItem('divorces');
+                allDivorces = stored ? JSON.parse(stored) : [];
+                filteredDivorces = [...allDivorces];
+                renderTable();
+            }
+            
+            // Rendre le tableau avec pagination
+            function renderTable() {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const pageDivorces = filteredDivorces.slice(startIndex, endIndex);
+                
+                tableBody.innerHTML = '';
+                
+                if (pageDivorces.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">Aucun divorce enregistré</td></tr>';
+                } else {
+                    pageDivorces.forEach(divorce => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${divorce.numeroJugement}</td>
+                            <td>${formatDate(divorce.date_divorce)}</td>
+                            <td>${divorce.epoux_prenom} ${divorce.epoux_nom}</td>
+                            <td>${divorce.epouse_prenom} ${divorce.epouse_nom}</td>
+                            <td>${formatDate(divorce.date_mariage)}</td>
+                            <td>${divorce.type_divorce}</td>
+                            <td>${divorce.tribunal}</td>
+                            <td>${divorce.garde_enfants || 'Non spécifié'}</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-primary view-btn" data-id="${divorce.id}"><i class="fas fa-eye"></i> Voir</button>
+                                    <button class="btn btn-warning edit-btn" data-id="${divorce.id}"><i class="fas fa-edit"></i> Modifier</button>
+                                    <button class="btn btn-danger delete-btn" data-id="${divorce.id}"><i class="fas fa-trash"></i> Supprimer</button>
+                                </div>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                }
+                
+                renderPagination();
+            }
+            
+            // Formater la date au format français
+            function formatDate(dateString) {
+                if (!dateString) return '';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('fr-FR');
+            }
+            
+            // Rendre la pagination
+            function renderPagination() {
+                const totalPages = Math.ceil(filteredDivorces.length / itemsPerPage);
+                
+                if (totalPages <= 1) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+                
+                let paginationHTML = '';
+                
+                // Bouton précédent
+                if (currentPage > 1) {
+                    paginationHTML += `<button class="prev-btn"><i class="fas fa-chevron-left"></i> Précédent</button>`;
+                }
+                
+                // Pages
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === currentPage) {
+                        paginationHTML += `<button class="active">${i}</button>`;
+                    } else {
+                        paginationHTML += `<button>${i}</button>`;
+                    }
+                }
+                
+                // Bouton suivant
+                if (currentPage < totalPages) {
+                    paginationHTML += `<button class="next-btn">Suivant <i class="fas fa-chevron-right"></i></button>`;
+                }
+                
+                pagination.innerHTML = paginationHTML;
+                
+                // Ajouter les événements de pagination
+                const pageButtons = pagination.querySelectorAll('button:not(.prev-btn):not(.next-btn)');
+                pageButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        currentPage = parseInt(this.textContent);
+                        renderTable();
+                    });
+                });
+                
+                const prevBtn = pagination.querySelector('.prev-btn');
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', function() {
+                        currentPage--;
+                        renderTable();
+                    });
+                }
+                
+                const nextBtn = pagination.querySelector('.next-btn');
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', function() {
+                        currentPage++;
+                        renderTable();
+                    });
+                }
+            }
+            
+            // Recherche
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase();
+                
+                if (searchTerm.trim() === '') {
+                    filteredDivorces = [...allDivorces];
+                } else {
+                    filteredDivorces = allDivorces.filter(divorce => {
+                        return (
+                            divorce.epoux_nom.toLowerCase().includes(searchTerm) ||
+                            divorce.epoux_prenom.toLowerCase().includes(searchTerm) ||
+                            divorce.epouse_nom.toLowerCase().includes(searchTerm) ||
+                            divorce.epouse_prenom.toLowerCase().includes(searchTerm) ||
+                            divorce.numeroJugement.toLowerCase().includes(searchTerm) ||
+                            divorce.tribunal.toLowerCase().includes(searchTerm) ||
+                            divorce.type_divorce.toLowerCase().includes(searchTerm)
+                        );
+                    });
+                }
+                
+                currentPage = 1;
+                renderTable();
+            }
+            
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Gestion des actions
+            tableBody.addEventListener('click', function(e) {
+                const target = e.target;
+                const button = target.closest('button');
+                if (!button) return;
+                
+                const id = button.getAttribute('data-id');
+                
+                if (button.classList.contains('view-btn')) {
+                    viewDivorce(id);
+                } else if (button.classList.contains('edit-btn')) {
+                    editDivorce(id);
+                } else if (button.classList.contains('delete-btn')) {
+                    deleteDivorce(id);
+                }
+            });
+            
+            // Voir un divorce
+            function viewDivorce(id) {
+                const divorce = allDivorces.find(d => d.id === id);
+                if (divorce) {
+                    alert(`Détails du divorce:\n\n` +
+                          `Numéro de jugement: ${divorce.numeroJugement}\n` +
+                          `Date du divorce: ${formatDate(divorce.date_divorce)}\n` +
+                          `Tribunal: ${divorce.tribunal}\n` +
+                          `Type de divorce: ${divorce.type_divorce}\n` +
+                          `Ancien époux: ${divorce.epoux_prenom} ${divorce.epoux_nom}\n` +
+                          `Date de naissance époux: ${formatDate(divorce.epoux_date_naissance)}\n` +
+                          `Domicile époux: ${divorce.epoux_domicile}\n` +
+                          `Avocat époux: ${divorce.epoux_avocat || 'Non spécifié'}\n` +
+                          `Ancienne épouse: ${divorce.epouse_prenom} ${divorce.epouse_nom}\n` +
+                          `Date de naissance épouse: ${formatDate(divorce.epouse_date_naissance)}\n` +
+                          `Domicile épouse: ${divorce.epouse_domicile}\n` +
+                          `Avocat épouse: ${divorce.epouse_avocat || 'Non spécifié'}\n` +
+                          `Date du mariage: ${formatDate(divorce.date_mariage)}\n` +
+                          `Lieu du mariage: ${divorce.lieu_mariage}\n` +
+                          `Garde des enfants: ${divorce.garde_enfants || 'Non spécifié'}\n` +
+                          `Pension alimentaire: ${divorce.pension_alimentaire || 'Non spécifiée'}\n` +
+                          `Partage des biens: ${divorce.partage_biens || 'Non spécifié'}`);
+                }
+            }
+            
+            // Modifier un divorce
+            function editDivorce(id) {
+                // Stocker l'ID du divorce à modifier
+                localStorage.setItem('editDivorceId', id);
+                // Rediriger vers le formulaire de déclaration
+                window.location.href = 'Déclare.html';
+            }
+            
+            // Supprimer un divorce
+            function deleteDivorce(id) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce divorce ?')) {
+                    allDivorces = allDivorces.filter(d => d.id !== id);
+                    localStorage.setItem('divorces', JSON.stringify(allDivorces));
+                    loadDivorces();
+                    alert('Divorce supprimé avec succès!');
+                }
+            }
+            
+            // Charger les données au démarrage
+            loadDivorces();
+        });
+    </script>
+</body>
+</html>

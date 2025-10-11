@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Déclaration de Divorce</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --sidebar-width: 250px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--dark-color);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid white;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Le reste du CSS reste inchangé */
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            position: relative;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .sidebar-menu .active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .dropdown-menu {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding-left: 20px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .user-info {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+        }
+
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--primary-color);
+            margin: 25px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spouse-section {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="Commune_urbaine_mahajanga.jpeg" alt="Logo" class="logo-image">
+            <h2>Gestion d'État Civil</h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="../index.html"><i class="fas fa-home"></i> Accueil</a></li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-baby"></i> Naissance</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Naissance/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Naissance/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-heart"></i> Mariage</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Mariage/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Mariage/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-cross"></i> Décès</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Deces/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Deces/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-user-times"></i> Divorce</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="Déclare.html" class="active"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li><a href="../résidence.html"><i class="fas fa-house-user"></i> Résidence</a></li>
+            </ul>
+        </div>
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <p>Nom d'utilisateur</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-edit"></i> Déclaration de Divorce</h1>
+        </div>
+
+        <div class="form-container">
+            <form id="divorceForm">
+                <h3 class="section-title"><i class="fas fa-info-circle"></i> Informations sur le mariage</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date_mariage"><i class="fas fa-calendar-heart"></i> Date du mariage *</label>
+                        <input type="date" id="date_mariage" name="date_mariage" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lieu_mariage"><i class="fas fa-map-marker-alt"></i> Lieu du mariage *</label>
+                        <input type="text" id="lieu_mariage" name="lieu_mariage" required>
+                    </div>
+                </div>
+
+                <h3 class="section-title"><i class="fas fa-users"></i> Informations sur les époux</h3>
+                <div class="spouse-section">
+                    <h4><i class="fas fa-male"></i> Ancien Époux</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="epoux_nom"><i class="fas fa-user"></i> Nom *</label>
+                            <input type="text" id="epoux_nom" name="epoux_nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="epoux_prenom"><i class="fas fa-user"></i> Prénom *</label>
+                            <input type="text" id="epoux_prenom" name="epoux_prenom" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="epoux_date_naissance"><i class="fas fa-calendar"></i> Date de naissance *</label>
+                            <input type="date" id="epoux_date_naissance" name="epoux_date_naissance" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="epoux_lieu_naissance"><i class="fas fa-map-marker-alt"></i> Lieu de naissance *</label>
+                            <input type="text" id="epoux_lieu_naissance" name="epoux_lieu_naissance" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="epoux_domicile"><i class="fas fa-home"></i> Domicile *</label>
+                            <input type="text" id="epoux_domicile" name="epoux_domicile" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="epoux_avocat"><i class="fas fa-gavel"></i> Avocat</label>
+                            <input type="text" id="epoux_avocat" name="epoux_avocat">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spouse-section">
+                    <h4><i class="fas fa-female"></i> Ancienne Épouse</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="epouse_nom"><i class="fas fa-user"></i> Nom *</label>
+                            <input type="text" id="epouse_nom" name="epouse_nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="epouse_prenom"><i class="fas fa-user"></i> Prénom *</label>
+                            <input type="text" id="epouse_prenom" name="epouse_prenom" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="epouse_date_naissance"><i class="fas fa-calendar"></i> Date de naissance *</label>
+                            <input type="date" id="epouse_date_naissance" name="epouse_date_naissance" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="epouse_lieu_naissance"><i class="fas fa-map-marker-alt"></i> Lieu de naissance *</label>
+                            <input type="text" id="epouse_lieu_naissance" name="epouse_lieu_naissance" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="epouse_domicile"><i class="fas fa-home"></i> Domicile *</label>
+                            <input type="text" id="epouse_domicile" name="epouse_domicile" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="epouse_avocat"><i class="fas fa-gavel"></i> Avocat</label>
+                            <input type="text" id="epouse_avocat" name="epouse_avocat">
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-title"><i class="fas fa-gavel"></i> Informations sur le divorce</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date_divorce"><i class="fas fa-calendar-times"></i> Date du jugement *</label>
+                        <input type="date" id="date_divorce" name="date_divorce" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="type_divorce"><i class="fas fa-balance-scale"></i> Type de divorce *</label>
+                        <select id="type_divorce" name="type_divorce" required>
+                            <option value="">Sélectionner</option>
+                            <option value="consentement">Consentement mutuel</option>
+                            <option value="accepte">Accepté du principe</option>
+                            <option value="faute">Pour faute</option>
+                            <option value="alteration">Altération définitive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tribunal"><i class="fas fa-balance-scale"></i> Tribunal *</label>
+                        <input type="text" id="tribunal" name="tribunal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numero_jugement"><i class="fas fa-hashtag"></i> N° de jugement *</label>
+                        <input type="text" id="numero_jugement" name="numero_jugement" required>
+                    </div>
+                </div>
+
+                <h3 class="section-title"><i class="fas fa-child"></i> Conséquences du divorce</h3>
+                <div class="form-group">
+                    <label for="garde_enfants"><i class="fas fa-users"></i> Garde des enfants</label>
+                    <select id="garde_enfants" name="garde_enfants">
+                        <option value="">Sélectionner</option>
+                        <option value="mere">Mère</option>
+                        <option value="pere">Père</option>
+                        <option value="alternee">Garde alternée</option>
+                        <option value="partage">Partage</option>
+                        <option value="aucun">Aucun enfant</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="pension_alimentaire"><i class="fas fa-money-bill-wave"></i> Pension alimentaire</label>
+                    <input type="text" id="pension_alimentaire" name="pension_alimentaire" placeholder="Montant et bénéficiaire">
+                </div>
+
+                <div class="form-group">
+                    <label for="partage_biens"><i class="fas fa-home"></i> Partage des biens</label>
+                    <textarea id="partage_biens" name="partage_biens" rows="3" placeholder="Détails du partage des biens..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-secondary"><i class="fas fa-times"></i> Annuler</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Enregistrer le divorce</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.querySelector('.dropdown-menu').style.display = 'block';
+                });
+                
+                dropdown.addEventListener('mouseleave', function() {
+                    this.querySelector('.dropdown-menu').style.display = 'none';
+                });
+            });
+
+            // Gestion du formulaire
+            const form = document.getElementById('divorceForm');
+            
+            // Vérifier si on est en mode édition
+            const editDivorceId = localStorage.getItem('editDivorceId');
+            if (editDivorceId) {
+                // Charger les données du divorce à modifier
+                const divorces = JSON.parse(localStorage.getItem('divorces') || '[]');
+                const divorceToEdit = divorces.find(d => d.id === editDivorceId);
+                
+                if (divorceToEdit) {
+                    // Pré-remplir le formulaire avec les données existantes
+                    Object.keys(divorceToEdit).forEach(key => {
+                        if (key !== 'id' && key !== 'numeroJugement') {
+                            const input = document.querySelector(`[name="${key}"]`);
+                            if (input) {
+                                input.value = divorceToEdit[key];
+                            }
+                        }
+                    });
+                    
+                    // Changer le texte du bouton
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<i class="fas fa-save"></i> Modifier le divorce';
+                }
+                
+                // Nettoyer l'ID d'édition après utilisation
+                localStorage.removeItem('editDivorceId');
+            }
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Récupérer les données du formulaire
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+                
+                // Générer un ID unique
+                const id = editDivorceId || Date.now().toString();
+                
+                // Générer un numéro de jugement
+                const divorces = JSON.parse(localStorage.getItem('divorces') || '[]');
+                const numeroJugement = editDivorceId 
+                    ? data.numero_jugement 
+                    : `J-${new Date().getFullYear()}-${String(divorces.length + 1).padStart(3, '0')}`;
+                
+                // Ajouter l'ID et le numéro de jugement
+                data.id = id;
+                data.numeroJugement = numeroJugement;
+                
+                if (editDivorceId) {
+                    // Mode édition : remplacer l'élément existant
+                    const index = divorces.findIndex(d => d.id === editDivorceId);
+                    if (index !== -1) {
+                        divorces[index] = data;
+                    }
+                } else {
+                    // Mode création : ajouter un nouvel élément
+                    divorces.push(data);
+                }
+                
+                // Enregistrer dans le localStorage
+                localStorage.setItem('divorces', JSON.stringify(divorces));
+                
+                // Rediriger vers le registre
+                window.location.href = 'Registre.html';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Déclaration de Naissance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --sidebar-width: 250px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--dark-color);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid white;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            margin: 0;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            position: relative;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .sidebar-menu .active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .dropdown-menu {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding-left: 20px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .user-info {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            cursor: pointer;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--primary-color);
+            margin: 25px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Overlay pour mobile */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+            
+            .main-content {
+                margin-left: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 15px;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .form-container {
+                padding: 15px;
+            }
+            
+            .section-title {
+                font-size: 16px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay pour mobile -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="./Commune_urbaine_mahajanga.jpeg" alt="Logo" class="logo-image">
+            <h2>Gestion d'État Civil</h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="../index.html"><i class="fas fa-home"></i> Accueil</a></li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-baby"></i> Naissance</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="Déclare.html" class="active"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-heart"></i> Mariage</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Mariage/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Mariage/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-cross"></i> Décès</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Deces/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Deces/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-user-times"></i> Divorce</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Divorce/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Divorce/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li><a href="../résidence.html"><i class="fas fa-house-user"></i> Résidence</a></li>
+            </ul>
+        </div>
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <p>Nom d'utilisateur</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1><i class="fas fa-edit"></i> Déclaration de Naissance</h1>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <form id="naissanceForm">
+                <h3 class="section-title"><i class="fas fa-baby"></i> Informations sur l'enfant</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nom"><i class="fas fa-user"></i> Nom de famille *</label>
+                        <input type="text" id="nom" name="nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="prenom"><i class="fas fa-user"></i> Prénom(s) *</label>
+                        <input type="text" id="prenom" name="prenom" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date_naissance"><i class="fas fa-calendar"></i> Date de naissance *</label>
+                        <input type="date" id="date_naissance" name="date_naissance" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="heure_naissance"><i class="fas fa-clock"></i> Heure de naissance</label>
+                        <input type="time" id="heure_naissance" name="heure_naissance">
+                    </div>
+                    <div class="form-group">
+                        <label for="sexe"><i class="fas fa-venus-mars"></i> Sexe *</label>
+                        <select id="sexe" name="sexe" required>
+                            <option value="">Sélectionner</option>
+                            <option value="M">Masculin</option>
+                            <option value="F">Féminin</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lieu_naissance"><i class="fas fa-map-marker-alt"></i> Lieu de naissance *</label>
+                    <input type="text" id="lieu_naissance" name="lieu_naissance" placeholder="Nom de l'hôpital ou clinique" required>
+                </div>
+
+                <h3 class="section-title"><i class="fas fa-users"></i> Informations sur les parents</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pere_nom"><i class="fas fa-male"></i> Nom du père</label>
+                        <input type="text" id="pere_nom" name="pere_nom">
+                    </div>
+                    <div class="form-group">
+                        <label for="mere_nom"><i class="fas fa-female"></i> Nom de la mère *</label>
+                        <input type="text" id="mere_nom" name="mere_nom" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pere_prenom"><i class="fas fa-male"></i> Prénom du père</label>
+                        <input type="text" id="pere_prenom" name="pere_prenom">
+                    </div>
+                    <div class="form-group">
+                        <label for="mere_prenom"><i class="fas fa-female"></i> Prénom de la mère *</label>
+                        <input type="text" id="mere_prenom" name="mere_prenom" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pere_profession"><i class="fas fa-briefcase"></i> Profession du père</label>
+                        <input type="text" id="pere_profession" name="pere_profession">
+                    </div>
+                    <div class="form-group">
+                        <label for="mere_profession"><i class="fas fa-briefcase"></i> Profession de la mère</label>
+                        <input type="text" id="mere_profession" name="mere_profession">
+                    </div>
+                </div>
+
+                <h3 class="section-title"><i class="fas fa-user-check"></i> Informations du déclarant</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="declarant_nom"><i class="fas fa-user"></i> Nom du déclarant *</label>
+                        <input type="text" id="declarant_nom" name="declarant_nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="declarant_prenom"><i class="fas fa-user"></i> Prénom du déclarant *</label>
+                        <input type="text" id="declarant_prenom" name="declarant_prenom" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="declarant_qualite"><i class="fas fa-user-tag"></i> Qualité du déclarant *</label>
+                        <select id="declarant_qualite" name="declarant_qualite" required>
+                            <option value="">Sélectionner</option>
+                            <option value="pere">Père</option>
+                            <option value="mere">Mère</option>
+                            <option value="medecin">Médecin</option>
+                            <option value="sage-femme">Sage-femme</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date_declaration"><i class="fas fa-calendar-check"></i> Date de déclaration *</label>
+                        <input type="date" id="date_declaration" name="date_declaration" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="observations"><i class="fas fa-sticky-note"></i> Observations</label>
+                    <textarea id="observations" name="observations" rows="3"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-secondary"><i class="fas fa-times"></i> Annuler</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Enregistrer la déclaration</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.querySelector('.dropdown-menu').style.display = 'block';
+                });
+                
+                dropdown.addEventListener('mouseleave', function() {
+                    this.querySelector('.dropdown-menu').style.display = 'none';
+                });
+            });
+
+            // Gestion du menu responsive
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const overlay = document.getElementById('overlay');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+            }
+
+            menuToggle.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+
+            // Fermer le sidebar en cliquant sur un lien (sur mobile)
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        toggleSidebar();
+                    }
+                });
+            });
+
+            // Gestion du formulaire
+            const form = document.getElementById('naissanceForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Récupérer les données du formulaire
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+                
+                // Générer un ID unique pour cette déclaration
+                const id = Date.now().toString();
+                
+                // Générer un numéro d'acte
+                const naissances = JSON.parse(localStorage.getItem('naissances') || '[]');
+                const numeroActe = `N-${new Date().getFullYear()}-${String(naissances.length + 1).padStart(3, '0')}`;
+                
+                // Ajouter l'ID et le numéro d'acte
+                data.id = id;
+                data.numeroActe = numeroActe;
+                
+                // Récupérer les naissances existantes
+                naissances.push(data);
+                
+                // Enregistrer dans le localStorage
+                localStorage.setItem('naissances', JSON.stringify(naissances));
+                
+                // Rediriger vers le registre
+                window.location.href = 'Registre.html';
+            });
+            
+            // Pré-remplir la date de déclaration avec la date du jour
+            document.getElementById('date_declaration').valueAsDate = new Date();
+        });
+    </script>
+</body>
+</html>

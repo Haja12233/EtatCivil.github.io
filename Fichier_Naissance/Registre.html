@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registre des Naissances</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --sidebar-width: 250px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--dark-color);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid white;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            margin: 0;
+            text-align: center;
+        }
+
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            position: relative;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .sidebar-menu .active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .dropdown-menu {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding-left: 20px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .user-info {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            cursor: pointer;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        tr:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pagination button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* Overlay pour mobile */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+            
+            .main-content {
+                margin-left: 220px;
+            }
+            
+            .search-bar input {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 15px;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .search-bar input {
+                width: 100%;
+            }
+            
+            .table-container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 10px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .table-container {
+                padding: 10px;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .pagination {
+                flex-wrap: wrap;
+            }
+            
+            .pagination button {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay pour mobile -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="./Commune_urbaine_mahajanga.jpeg" alt="Logo" class="logo-image">
+            <h2>Gestion d'État Civil</h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="../index.html"><i class="fas fa-home"></i> Accueil</a></li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-baby"></i> Naissance</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="Registre.html" class="active"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-heart"></i> Mariage</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Mariage/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Mariage/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-cross"></i> Décès</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Deces/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Deces/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-user-times"></i> Divorce</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../Fichier_Divorce/Registre.html"><i class="fas fa-book"></i> Registre</a></li>
+                        <li><a href="../Fichier_Divorce/Déclare.html"><i class="fas fa-edit"></i> Déclaré</a></li>
+                    </ul>
+                </li>
+                <li><a href="../résidence.html"><i class="fas fa-house-user"></i> Résidence</a></li>
+            </ul>
+        </div>
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <p>Nom d'utilisateur</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1><i class="fas fa-book"></i> Registre des Naissances</h1>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Rechercher...">
+                <button class="btn btn-primary" id="searchButton"><i class="fas fa-search"></i> Rechercher</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag"></i> N° Acte</th>
+                        <th><i class="fas fa-user"></i> Nom</th>
+                        <th><i class="fas fa-user"></i> Prénom</th>
+                        <th><i class="fas fa-calendar"></i> Date Naissance</th>
+                        <th><i class="fas fa-map-marker-alt"></i> Lieu Naissance</th>
+                        <th><i class="fas fa-venus-mars"></i> Sexe</th>
+                        <th><i class="fas fa-users"></i> Parents</th>
+                        <th><i class="fas fa-calendar-check"></i> Date Déclaration</th>
+                        <th><i class="fas fa-cog"></i> Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Les données seront insérées ici dynamiquement -->
+                </tbody>
+            </table>
+            
+            <div class="pagination" id="pagination">
+                <!-- La pagination sera générée dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.querySelector('.dropdown-menu').style.display = 'block';
+                });
+                
+                dropdown.addEventListener('mouseleave', function() {
+                    this.querySelector('.dropdown-menu').style.display = 'none';
+                });
+            });
+
+            // Gestion du menu responsive
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const overlay = document.getElementById('overlay');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+            }
+
+            menuToggle.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+
+            // Fermer le sidebar en cliquant sur un lien (sur mobile)
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        toggleSidebar();
+                    }
+                });
+            });
+
+            // Gestion du registre
+            const tableBody = document.getElementById('tableBody');
+            const pagination = document.getElementById('pagination');
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            
+            let currentPage = 1;
+            const itemsPerPage = 5;
+            let allNaissances = [];
+            let filteredNaissances = [];
+            
+            // Charger les données depuis le localStorage
+            function loadNaissances() {
+                const stored = localStorage.getItem('naissances');
+                allNaissances = stored ? JSON.parse(stored) : [];
+                filteredNaissances = [...allNaissances];
+                renderTable();
+            }
+            
+            // Rendre le tableau avec pagination
+            function renderTable() {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const pageNaissances = filteredNaissances.slice(startIndex, endIndex);
+                
+                tableBody.innerHTML = '';
+                
+                if (pageNaissances.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">Aucune déclaration de naissance enregistrée</td></tr>';
+                } else {
+                    pageNaissances.forEach(naissance => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${naissance.numeroActe}</td>
+                            <td>${naissance.nom}</td>
+                            <td>${naissance.prenom}</td>
+                            <td>${formatDate(naissance.date_naissance)}</td>
+                            <td>${naissance.lieu_naissance}</td>
+                            <td>${naissance.sexe === 'M' ? 'Masculin' : 'Féminin'}</td>
+                            <td>${(naissance.pere_prenom || '') + ' ' + (naissance.pere_nom || '')} & ${naissance.mere_prenom} ${naissance.mere_nom}</td>
+                            <td>${formatDate(naissance.date_declaration)}</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-primary view-btn" data-id="${naissance.id}"><i class="fas fa-eye"></i> Voir</button>
+                                    <button class="btn btn-warning edit-btn" data-id="${naissance.id}"><i class="fas fa-edit"></i> Modifier</button>
+                                    <button class="btn btn-danger delete-btn" data-id="${naissance.id}"><i class="fas fa-trash"></i> Supprimer</button>
+                                </div>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                }
+                
+                renderPagination();
+            }
+            
+            // Formater la date au format français
+            function formatDate(dateString) {
+                if (!dateString) return '';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('fr-FR');
+            }
+            
+            // Rendre la pagination
+            function renderPagination() {
+                const totalPages = Math.ceil(filteredNaissances.length / itemsPerPage);
+                
+                if (totalPages <= 1) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+                
+                let paginationHTML = '';
+                
+                // Bouton précédent
+                if (currentPage > 1) {
+                    paginationHTML += `<button class="prev-btn"><i class="fas fa-chevron-left"></i> Précédent</button>`;
+                }
+                
+                // Pages
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === currentPage) {
+                        paginationHTML += `<button class="active">${i}</button>`;
+                    } else {
+                        paginationHTML += `<button>${i}</button>`;
+                    }
+                }
+                
+                // Bouton suivant
+                if (currentPage < totalPages) {
+                    paginationHTML += `<button class="next-btn">Suivant <i class="fas fa-chevron-right"></i></button>`;
+                }
+                
+                pagination.innerHTML = paginationHTML;
+                
+                // Ajouter les événements de pagination
+                const pageButtons = pagination.querySelectorAll('button:not(.prev-btn):not(.next-btn)');
+                pageButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        currentPage = parseInt(this.textContent);
+                        renderTable();
+                    });
+                });
+                
+                const prevBtn = pagination.querySelector('.prev-btn');
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', function() {
+                        currentPage--;
+                        renderTable();
+                    });
+                }
+                
+                const nextBtn = pagination.querySelector('.next-btn');
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', function() {
+                        currentPage++;
+                        renderTable();
+                    });
+                }
+            }
+            
+            // Recherche
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase();
+                
+                if (searchTerm.trim() === '') {
+                    filteredNaissances = [...allNaissances];
+                } else {
+                    filteredNaissances = allNaissances.filter(naissance => {
+                        return (
+                            naissance.nom.toLowerCase().includes(searchTerm) ||
+                            naissance.prenom.toLowerCase().includes(searchTerm) ||
+                            naissance.numeroActe.toLowerCase().includes(searchTerm) ||
+                            naissance.lieu_naissance.toLowerCase().includes(searchTerm) ||
+                            (naissance.pere_nom && naissance.pere_nom.toLowerCase().includes(searchTerm)) ||
+                            (naissance.mere_nom && naissance.mere_nom.toLowerCase().includes(searchTerm))
+                        );
+                    });
+                }
+                
+                currentPage = 1;
+                renderTable();
+            }
+            
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Gestion des actions
+            tableBody.addEventListener('click', function(e) {
+                const target = e.target;
+                const id = target.closest('button').getAttribute('data-id');
+                
+                if (target.closest('.view-btn')) {
+                    viewNaissance(id);
+                } else if (target.closest('.edit-btn')) {
+                    editNaissance(id);
+                } else if (target.closest('.delete-btn')) {
+                    deleteNaissance(id);
+                }
+            });
+            
+            // Voir une déclaration
+            function viewNaissance(id) {
+                const naissance = allNaissances.find(n => n.id === id);
+                if (naissance) {
+                    alert(`Détails de la déclaration:\n\n` +
+                          `Numéro d'acte: ${naissance.numeroActe}\n` +
+                          `Nom: ${naissance.nom}\n` +
+                          `Prénom: ${naissance.prenom}\n` +
+                          `Date de naissance: ${formatDate(naissance.date_naissance)}\n` +
+                          `Lieu de naissance: ${naissance.lieu_naissance}\n` +
+                          `Sexe: ${naissance.sexe === 'M' ? 'Masculin' : 'Féminin'}\n` +
+                          `Parents: ${(naissance.pere_prenom || '') + ' ' + (naissance.pere_nom || '')} & ${naissance.mere_prenom} ${naissance.mere_nom}\n` +
+                          `Date de déclaration: ${formatDate(naissance.date_declaration)}\n` +
+                          `Observations: ${naissance.observations || 'Aucune'}`);
+                }
+            }
+            
+            // Modifier une déclaration
+            function editNaissance(id) {
+                // Stocker l'ID de la déclaration à modifier
+                localStorage.setItem('editNaissanceId', id);
+                // Rediriger vers le formulaire de déclaration
+                window.location.href = 'Déclare.html';
+            }
+            
+            // Supprimer une déclaration
+            function deleteNaissance(id) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer cette déclaration de naissance ?')) {
+                    allNaissances = allNaissances.filter(n => n.id !== id);
+                    localStorage.setItem('naissances', JSON.stringify(allNaissances));
+                    loadNaissances();
+                    alert('Déclaration supprimée avec succès!');
+                }
+            }
+            
+            // Charger les données au démarrage
+            loadNaissances();
+        });
+    </script>
+</body>
+</html>
