@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Commune Urbaine de Mahajanga</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .signin-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+
+        .signin-header {
+            background: var(--dark-color);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .logo-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .signin-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-google {
+            background: #db4437;
+            color: white;
+            margin-top: 1rem;
+        }
+
+        .btn-google:hover {
+            background: #c23321;
+            transform: translateY(-2px);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            color: #7f8c8d;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e1e5e9;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .signin-footer {
+            text-align: center;
+            padding: 1rem 2rem 2rem;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .signin-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signin-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .verification-section {
+            text-align: center;
+        }
+
+        .verification-code {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .verification-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+        }
+
+        .verification-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .resend-code {
+            margin-top: 1rem;
+            color: #7f8c8d;
+        }
+
+        .resend-code a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .resend-code a:hover {
+            text-decoration: underline;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #e1e5e9;
+            border-radius: 2px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--primary-color);
+            width: 33%;
+            transition: width 0.3s;
+        }
+
+        .step-indicator {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="signin-container">
+        <div class="signin-header">
+            <div class="logo">
+                <img src="Commune_urbaine_mahajanga.jpeg" alt="Logo Commune Mahajanga" class="logo-image">
+                <div class="logo-text">
+                    <h1>Commune Urbaine</h1>
+                    <p>Service d'État Civil</p>
+                </div>
+            </div>
+            <h2>Créer votre compte</h2>
+        </div>
+
+        <div class="signin-body">
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+            <div class="step-indicator" id="stepIndicator">Étape 1 sur 3</div>
+
+            <div id="alertMessage" class="alert alert-error hidden">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="alertText"></span>
+            </div>
+
+            <!-- Étape 1: Informations personnelles -->
+            <form id="personalInfoForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName"><i class="fas fa-user"></i> Prénom</label>
+                        <input type="text" id="firstName" class="form-control" placeholder="Votre prénom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName"><i class="fas fa-user"></i> Nom</label>
+                        <input type="text" id="lastName" class="form-control" placeholder="Votre nom" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Adresse email</label>
+                    <input type="email" id="email" class="form-control" placeholder="votre@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone"><i class="fas fa-phone"></i> Numéro de téléphone</label>
+                    <input type="tel" id="phone" class="form-control" placeholder="+261 XX XX XXX XX" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address"><i class="fas fa-map-marker-alt"></i> Adresse</label>
+                    <input type="text" id="address" class="form-control" placeholder="Votre adresse complète" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="nextStep1">
+                    <i class="fas fa-arrow-right"></i> Continuer
+                </button>
+            </form>
+
+            <!-- Étape 2: Création du mot de passe -->
+            <form id="passwordForm" class="hidden">
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Mot de passe</label>
+                    <input type="password" id="password" class="form-control" placeholder="Créez un mot de passe sécurisé" required>
+                    <small style="color: #7f8c8d; margin-top: 5px; display: block;">
+                        Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword"><i class="fas fa-lock"></i> Confirmer le mot de passe</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="Confirmez votre mot de passe" required>
+                </div>
+
+                <div class="form-row">
+                    <button type="button" class="btn" style="background: #95a5a6; color: white;" id="backStep1">
+                        <i class="fas fa-arrow-left"></i> Retour
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="nextStep2">
+                        <i class="fas fa-arrow-right"></i> Continuer
+                    </button>
+                </div>
+            </form>
+
+            <!-- Étape 3: Vérification par email -->
+            <div id="verificationForm" class="hidden">
+                <div class="verification-section">
+                    <h3 style="margin-bottom: 1rem; color: var(--dark-color);">Vérification de votre email</h3>
+                    <p>Nous avons envoyé un code de vérification à <strong id="userEmail"></strong></p>
+                    
+                    <div class="verification-code">
+                        <input type="text" class="verification-input" maxlength="1" data-index="1">
+                        <input type="text" class="verification-input" maxlength="1" data-index="2">
+                        <input type="text" class="verification-input" maxlength="1" data-index="3">
+                        <input type="text" class="verification-input" maxlength="1" data-index="4">
+                        <input type="text" class="verification-input" maxlength="1" data-index="5">
+                        <input type="text" class="verification-input" maxlength="1" data-index="6">
+                    </div>
+
+                    <div class="resend-code">
+                        <p>Vous n'avez pas reçu le code ? <a href="#" id="resendCode">Renvoyer le code</a></p>
+                    </div>
+
+                    <div class="form-row" style="margin-top: 2rem;">
+                        <button type="button" class="btn" style="background: #95a5a6; color: white;" id="backStep2">
+                            <i class="fas fa-arrow-left"></i> Retour
+                        </button>
+                        <button type="button" class="btn btn-primary" id="verifyCode">
+                            <i class="fas fa-check"></i> Vérifier
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider">
+                <span>Ou inscrivez-vous avec</span>
+            </div>
+
+            <button class="btn btn-google" id="googleSignup">
+                <i class="fab fa-google"></i> S'inscrire avec Google
+            </button>
+        </div>
+
+        <div class="signin-footer">
+            <p>Vous avez déjà un compte ? <a href="login.html">Se connecter</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const personalInfoForm = document.getElementById('personalInfoForm');
+            const passwordForm = document.getElementById('passwordForm');
+            const verificationForm = document.getElementById('verificationForm');
+            const progressBar = document.getElementById('progressBar');
+            const stepIndicator = document.getElementById('stepIndicator');
+            const alertMessage = document.getElementById('alertMessage');
+            const alertText = document.getElementById('alertText');
+            const userEmail = document.getElementById('userEmail');
+            const verificationInputs = document.querySelectorAll('.verification-input');
+            const resendCode = document.getElementById('resendCode');
+
+            let currentStep = 1;
+            let verificationCode = '';
+
+            // Fonction pour afficher les alertes
+            function showAlert(message, type) {
+                alertText.textContent = message;
+                alertMessage.className = `alert alert-${type}`;
+                alertMessage.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    alertMessage.classList.add('hidden');
+                }, 5000);
+            }
+
+            // Mettre à jour la progression
+            function updateProgress() {
+                const progress = (currentStep / 3) * 100;
+                progressBar.style.width = `${progress}%`;
+                stepIndicator.textContent = `Étape ${currentStep} sur 3`;
+            }
+
+            // Générer un code de vérification
+            function generateVerificationCode() {
+                return Math.floor(100000 + Math.random() * 900000).toString();
+            }
+
+            // Étape 1: Informations personnelles
+            personalInfoForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const address = document.getElementById('address').value;
+
+                if (firstName && lastName && email && phone && address) {
+                    personalInfoForm.classList.add('hidden');
+                    passwordForm.classList.remove('hidden');
+                    currentStep = 2;
+                    updateProgress();
+                } else {
+                    showAlert('Veuillez remplir tous les champs', 'error');
+                }
+            });
+
+            // Étape 2: Mot de passe
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (password.length < 8) {
+                    showAlert('Le mot de passe doit contenir au moins 8 caractères', 'error');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showAlert('Les mots de passe ne correspondent pas', 'error');
+                    return;
+                }
+
+                // Générer et envoyer le code de vérification
+                verificationCode = generateVerificationCode();
+                const email = document.getElementById('email').value;
+                userEmail.textContent = email;
+
+                // Simulation d'envoi d'email
+                showAlert(`Code de vérification envoyé à ${email} (Code: ${verificationCode})`, 'success');
+
+                passwordForm.classList.add('hidden');
+                verificationForm.classList.remove('hidden');
+                currentStep = 3;
+                updateProgress();
+
+                // Focus sur le premier champ de code
+                verificationInputs[0].focus();
+            });
+
+            // Navigation entre les étapes
+            document.getElementById('backStep1').addEventListener('click', function() {
+                passwordForm.classList.add('hidden');
+                personalInfoForm.classList.remove('hidden');
+                currentStep = 1;
+                updateProgress();
+            });
+
+            document.getElementById('backStep2').addEventListener('click', function() {
+                verificationForm.classList.add('hidden');
+                passwordForm.classList.remove('hidden');
+                currentStep = 2;
+                updateProgress();
+            });
+
+            // Gestion des champs de code de vérification
+            verificationInputs.forEach((input, index) => {
+                input.addEventListener('input', function() {
+                    if (this.value.length === 1) {
+                        if (index < verificationInputs.length - 1) {
+                            verificationInputs[index + 1].focus();
+                        }
+                    }
+                });
+
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && this.value.length === 0) {
+                        if (index > 0) {
+                            verificationInputs[index - 1].focus();
+                        }
+                    }
+                });
+            });
+
+            // Vérification du code
+            document.getElementById('verifyCode').addEventListener('click', function() {
+                let enteredCode = '';
+                verificationInputs.forEach(input => {
+                    enteredCode += input.value;
+                });
+
+                if (enteredCode.length !== 6) {
+                    showAlert('Veuillez entrer le code complet à 6 chiffres', 'error');
+                    return;
+                }
+
+                if (enteredCode === verificationCode) {
+                    showAlert('Compte créé avec succès! Redirection...', 'success');
+                    
+                    // Redirection vers la page de connexion après 2 secondes
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showAlert('Code de vérification incorrect', 'error');
+                    // Effacer les champs
+                    verificationInputs.forEach(input => {
+                        input.value = '';
+                    });
+                    verificationInputs[0].focus();
+                }
+            });
+
+            // Renvoyer le code
+            resendCode.addEventListener('click', function(e) {
+                e.preventDefault();
+                verificationCode = generateVerificationCode();
+                const email = document.getElementById('email').value;
+                showAlert(`Nouveau code envoyé à ${email} (Code: ${verificationCode})`, 'success');
+            });
+
+            // Inscription avec Google
+            document.getElementById('googleSignup').addEventListener('click', function() {
+                showAlert('Inscription avec Google en cours...', 'success');
+                
+                // Simulation d'inscription Google
+                setTimeout(() => {
+                    showAlert('Inscription Google réussie! Redirection...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'accueille.html';
+                    }, 2000);
+                }, 1500);
+            });
+
+            // Initialisation
+            updateProgress();
+
+            // Animation d'entrée
+            document.querySelector('.signin-container').style.opacity = '0';
+            document.querySelector('.signin-container').style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                document.querySelector('.signin-container').style.transition = 'all 0.5s ease';
+                document.querySelector('.signin-container').style.opacity = '1';
+                document.querySelector('.signin-container').style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
